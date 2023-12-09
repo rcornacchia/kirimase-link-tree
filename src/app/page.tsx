@@ -1,5 +1,6 @@
 import AuthForm from "@/components/auth/Form";
 import { getUserAuth } from "@/lib/auth/utils";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -12,6 +13,14 @@ export default async function Home() {
         {JSON.stringify(session, null, 2)}
       </pre>
       <AuthForm action="/api/sign-out" />
+      <ul>
+        <li>
+          <Link href="/pages">Pages</Link>
+        </li>
+        <li>
+          <Link href="/page-links">Page Links</Link>
+        </li>
+      </ul>
     </main>
   );
 }
