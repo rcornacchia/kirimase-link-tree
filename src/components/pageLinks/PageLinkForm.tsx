@@ -1,6 +1,10 @@
 "use client";
 
-import { PageLink, NewPageLinkParams, insertPageLinkParams } from "@/lib/db/schema/pageLinks";
+import {
+  PageLink,
+  NewPageLinkParams,
+  insertPageLinkParams,
+} from "@/lib/db/schema/pageLinks";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,7 +20,13 @@ import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -41,16 +51,17 @@ const PageLinkForm = ({
     resolver: zodResolver(insertPageLinkParams),
     defaultValues: pageLink ?? {
       title: "",
-     url: "",
-     pageId: 0
+      url: "",
+      pageId: 0,
     },
   });
 
   const onSuccess = async (action: "create" | "update" | "delete") => {
     await utils.pageLinks.getPageLinks.invalidate();
     router.refresh();
-    closeModal();toast({
-      title: 'Success',
+    closeModal();
+    toast({
+      title: "Success",
       description: `Page Link ${action}d!`,
       variant: "default",
     });
@@ -84,11 +95,12 @@ const PageLinkForm = ({
         <FormField
           control={form.control}
           name="title"
-          render={({ field }) => (<FormItem>
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Title</FormLabel>
-                <FormControl>
-            <Input {...field} />
-          </FormControl>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
               <FormMessage />
             </FormItem>
@@ -97,11 +109,12 @@ const PageLinkForm = ({
         <FormField
           control={form.control}
           name="url"
-          render={({ field }) => (<FormItem>
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Url</FormLabel>
-                <FormControl>
-            <Input {...field} />
-          </FormControl>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
               <FormMessage />
             </FormItem>
@@ -110,9 +123,10 @@ const PageLinkForm = ({
         <FormField
           control={form.control}
           name="pageId"
-          render={({ field }) => (<FormItem>
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Page Id</FormLabel>
-                <FormControl>
+              <FormControl>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={String(field.value)}
@@ -123,12 +137,12 @@ const PageLinkForm = ({
                   <SelectContent>
                     {pages?.pages.map((page) => (
                       <SelectItem key={page.id} value={page.id.toString()}>
-                        {page.id}  {/* TODO: Replace with a field from the page model */}
+                        {page.title}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-            </FormControl>
+              </FormControl>
 
               <FormMessage />
             </FormItem>

@@ -2,7 +2,7 @@
 import { CompletePage } from "@/lib/db/schema/pages";
 import { trpc } from "@/lib/trpc/client";
 import PageModal from "./PageModal";
-
+import Link from "next/link";
 
 export default function PageList({ pages }: { pages: CompletePage[] }) {
   const { data: p } = trpc.pages.getPages.useQuery(undefined, {
@@ -29,7 +29,10 @@ const Page = ({ page }: { page: CompletePage }) => {
       <div className="w-full">
         <div>{page.title}</div>
       </div>
-      <PageModal page={page} />
+      <div className="flex space-x-4">
+        <Link href={`${page.slug}`}>Public Link</Link>
+        <PageModal page={page} />
+      </div>
     </li>
   );
 };
@@ -47,4 +50,3 @@ const EmptyState = () => {
     </div>
   );
 };
-
