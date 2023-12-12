@@ -28,7 +28,8 @@ const PageForm = ({
   closeModal: () => void;
 }) => {
   const { toast } = useToast();
-  
+
+  const { data: sub } = trpc.account.getSubscription.useQuery();
   const editing = !!page?.id;
 
   const router = useRouter();
@@ -41,17 +42,18 @@ const PageForm = ({
     resolver: zodResolver(insertPageParams),
     defaultValues: page ?? {
       title: "",
-     description: "",
-     public: false,
-     slug: ""
+      description: "",
+      public: false,
+      slug: "",
     },
   });
 
   const onSuccess = async (action: "create" | "update" | "delete") => {
     await utils.pages.getPages.invalidate();
     router.refresh();
-    closeModal();toast({
-      title: 'Success',
+    closeModal();
+    toast({
+      title: "Success",
       description: `Page ${action}d!`,
       variant: "default",
     });
@@ -85,11 +87,12 @@ const PageForm = ({
         <FormField
           control={form.control}
           name="title"
-          render={({ field }) => (<FormItem>
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Title</FormLabel>
-                <FormControl>
-            <Input {...field} />
-          </FormControl>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
               <FormMessage />
             </FormItem>
@@ -98,11 +101,12 @@ const PageForm = ({
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (<FormItem>
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Description</FormLabel>
-                <FormControl>
-            <Input {...field} />
-          </FormControl>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
               <FormMessage />
             </FormItem>
@@ -111,12 +115,19 @@ const PageForm = ({
         <FormField
           control={form.control}
           name="public"
-          render={({ field }) => (<FormItem>
+          disabled={sub?.isSubscribed === false ?? false}
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Public</FormLabel>
-                <br />
-            <FormControl>
-              <Checkbox {...field} checked={!!field.value} onCheckedChange={field.onChange} value={""} />
-            </FormControl>
+              <br />
+              <FormControl>
+                <Checkbox
+                  {...field}
+                  checked={!!field.value}
+                  onCheckedChange={field.onChange}
+                  value={""}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -124,11 +135,12 @@ const PageForm = ({
         <FormField
           control={form.control}
           name="slug"
-          render={({ field }) => (<FormItem>
+          render={({ field }) => (
+            <FormItem>
               <FormLabel>Slug</FormLabel>
-                <FormControl>
-            <Input {...field} />
-          </FormControl>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
               <FormMessage />
             </FormItem>
